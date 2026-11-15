@@ -1,0 +1,44 @@
+
+{
+  "Language": {
+    "arabic": "العربية",
+    "turkish": "Türkçe"
+  },
+  "Dashboard": {
+    "title": "Kontrol Paneli",
+    "welcome": "FixTrack'e Hoş Geldiniz",
+    "welcomeText": "Tamir işlemlerini ve müşteri taleplerini tek yerden yönetin.",
+    "totalRepairs": "Toplam Talepler",
+    "inRepair": "Tamir Ediliyor",
+    "waitingParts": "Parça Bekliyor",
+    "ready": "Teslime Hazır",
+    "addRepair": "Tamir Talebi Ekle"
+  },
+  "Navigation": {
+    "dashboard": "Kontrol Paneli",
+    "repairs": "Tamir Talepleri",
+    "customers": "Müşteriler",
+    "accounts": "Hesaplar",
+    "reports": "Raporlar",
+    "settings": "Ayarlar"
+  },
+  "Repairs": {
+    "title": "Tamir Talepleri",
+    "search": "Talep numarası veya isim ara...",
+    "orderNumber": "Talep No",
+    "customer": "Müşteri",
+    "deviceIssue": "Cihaz ve Arıza",
+    "receivedDate": "Teslim Alma Tarihi",
+    "status": "Durum",
+    "price": "Fiyat (₺)",
+    "actions": "İşlemler",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "create": "Talep Oluştur",
+    "cancel": "İptal",
+    "customerName": "Müşteri Adı",
+    "phone": "Telefon Numarası",
+    "device": "Cihaz ve Model",
+    "issue": "Arıza"
+  }
+}

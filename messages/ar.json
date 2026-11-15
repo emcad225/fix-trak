@@ -1,0 +1,44 @@
+
+{
+  "Language": {
+    "arabic": "العربية",
+    "turkish": "Türkçe"
+  },
+  "Dashboard": {
+    "title": "لوحة التحكم",
+    "welcome": "أهلًا بك في FixTrack",
+    "welcomeText": "تابع عمليات الصيانة وأدر طلبات الزبائن من مكان واحد.",
+    "totalRepairs": "إجمالي الطلبات",
+    "inRepair": "قيد الصيانة",
+    "waitingParts": "بانتظار القطع",
+    "ready": "جاهزة للاستلام",
+    "addRepair": "إضافة طلب صيانة"
+  },
+  "Navigation": {
+    "dashboard": "لوحة التحكم",
+    "repairs": "طلبات الصيانة",
+    "customers": "الزبائن",
+    "accounts": "الحسابات",
+    "reports": "التقارير",
+    "settings": "الإعدادات"
+  },
+  "Repairs": {
+    "title": "طلبات الصيانة",
+    "search": "ابحث برقم الطلب أو الاسم...",
+    "orderNumber": "رقم الطلب",
+    "customer": "الزبون",
+    "deviceIssue": "الجهاز والعطل",
+    "receivedDate": "تاريخ الاستلام",
+    "status": "الحالة",
+    "price": "السعر (₺)",
+    "actions": "الإجراءات",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "create": "إنشاء الطلب",
+    "cancel": "إلغاء",
+    "customerName": "اسم الزبون",
+    "phone": "رقم الهاتف",
+    "device": "نوع الجهاز والموديل",
+    "issue": "العطل"
+  }
+}
