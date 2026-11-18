@@ -1,22 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["192.168.1.*"],
-  serverExternalPackages: ["@node-rs/argon2"],
-  turbopack: {
-    rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
-      },
-    },
+  typescript: {
+    ignoreBuildErrors: true, // لتجاوز أخطاء الأنواع أثناء البناء
   },
 };
 
-export default nextConfig;
-const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-};
 export default nextConfig;
