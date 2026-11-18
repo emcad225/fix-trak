@@ -4,7 +4,8 @@ import { useEffect, useState, type FormEvent } from "react";
 
 import CustomersPanel from "../components/CustomersPanel";
 import AccountsPanel from "../components/AccountsPanel";
-
+import ReportsPanel from "../components/ReportsPanel";
+import SettingsPanel from "../components/SettingsPanel";
 type Repair = {
   id: string;
   trackingToken: string;
@@ -607,6 +608,10 @@ export default function Home() {
             <CustomersPanel language={language} />
           ) : activeNav === "accounts" ? (
             <AccountsPanel language={language} />
+                      ) : activeNav === "reports" ? (
+            <ReportsPanel language={language} />
+                      ) : activeNav === "settings" ? (
+            <SettingsPanel language={language} />
           ) : activeNav !== "dashboard" && activeNav !== "repairs" ? (
             <div className="rounded-2xl border border-slate-200 bg-white p-8">
               <h3 className="text-xl font-bold">{t[activeNav]}</h3>
