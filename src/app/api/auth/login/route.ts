@@ -58,11 +58,36 @@ export async function POST(request: Request) {
   const hashToCheck = user?.passwordHash ?? (await dummyHash);
   const passwordOk = await verifyPassword(hashToCheck, password);
 
-  const allowed =
-    !!user &&
-    passwordOk &&
-    user.isActive &&
-    (!user.shopId || user.shop?.isActive);
+  console.log("LOGIN DEBUG:", {
+  userFound: !!user,
+  passwordOk,
+  userActive: user?.isActive,
+  shopIdExists: !!user?.shopId,
+  shopActive: user?.shop?.isActive,
+});
+
+console.log("LOGIN DEBUG:", {
+  userFound: !!user,
+  passwordOk,
+  userActive: user?.isActive,
+  shopIdExists: !!user?.shopId,
+  shopActive: user?.shop?.isActive,
+});
+
+console.log("LOGIN DEBUG:", {
+  userFound: !!user,
+  passwordOk,
+  userActive: user?.isActive,
+  shopIdExists: !!user?.shopId,
+  shopActive: user?.shop?.isActive,
+});
+
+const allowed =
+  !!user &&
+  passwordOk &&
+  user.isActive &&
+  (!user.shopId || user.shop?.isActive);
+  
 
   if (!allowed || !user) {
     recordFailure(key);

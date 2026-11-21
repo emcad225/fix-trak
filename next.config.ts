@@ -1,10 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  serverExternalPackages: ["@node-rs/argon2", "@prisma/client"],
+  allowedDevOrigins: ["192.168.1.*"],
+  serverExternalPackages: ["@node-rs/argon2"],
 };
 
 export default nextConfig;
