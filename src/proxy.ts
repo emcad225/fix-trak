@@ -12,6 +12,7 @@ const PUBLIC_PREFIXES = [
   "/api/auth/login",
   "/api/auth/register",
   "/api/track",
+  "/api/version",
 ];
 
 function isPublic(pathname: string) {
