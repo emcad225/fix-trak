@@ -334,9 +334,14 @@ export default function Home() {
 
   async function loadRepairs() {
     try {
-      const response = await fetch("/api/repairs");
-      const data = await response.json();
+            const response = await fetch("/api/repairs");
 
+      if (response.status === 402) {
+        window.location.href = "/billing";
+        return;
+      }
+
+      const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error || translations[language].errLoad);
       }

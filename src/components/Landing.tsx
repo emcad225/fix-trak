@@ -5,9 +5,8 @@ import { useEffect, useState } from "react";
 
 type Lang = "ar" | "tr";
 
-const MONTHLY = 3500;
-const YEARLY = 25000;
-
+const MONTHLY = 1500;
+const YEARLY = 4500;
 const content = {
   ar: {
     login: "تسجيل الدخول",

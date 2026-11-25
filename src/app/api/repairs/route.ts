@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Prisma, RepairStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { canUseApp, shopStatus } from "@/lib/subscription";
 
 export const runtime = "nodejs";
 
@@ -48,7 +49,21 @@ async function requireShop(): Promise<Access> {
       ),
     };
   }
+  const shop = await prisma.shop.findUnique({
+    where: { id: user.shopId },
+    select: { isActive: true, trialEndsAt: true, subscribedUntil: true },
+  });
 
+  // التجربة أو الاشتراك منتهي: نوقف الاستخدام (402).
+  if (!shop || !canUseApp(shopStatus(shop))) {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { error: "SUBSCRIPTION_REQUIRED" },
+        { status: 402 }
+      ),
+    };
+  }
   return { ok: true, shopId: user.shopId, isOwner: user.role === "OWNER" };
 }
 

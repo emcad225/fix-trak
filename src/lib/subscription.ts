@@ -7,8 +7,7 @@ export type ShopStatus =
   | "EXPIRED"
   | "DISABLED";
 
-export const PLAN_PRICES = { MONTHLY: 3500, YEARLY: 25000 } as const;
-
+export const PLAN_PRICES = { MONTHLY: 1500, YEARLY: 4500 } as const;
 export function shopStatus(
   shop: Pick<Shop, "isActive" | "trialEndsAt" | "subscribedUntil">,
   now = new Date()
