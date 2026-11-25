@@ -40,6 +40,9 @@ const content = {
     save: (n: number) => `وفّر ${n}%`,
     pricingNote: "تجربة مجانية 7 أيام. الدفع حالياً بتحويل بنكي.",
     finalTitle: "جاهز تجرّب؟",
+        soonTitle: "قريباً",
+    soonText:
+      "إشعارات تلقائية للزبون عبر SMS وواتساب لحظة استلام جهازه، مع رابط تتبع الجهاز.",
     switchLang: "🇹🇷 Türkçe",
   },
   tr: {
@@ -73,6 +76,9 @@ const content = {
     save: (n: number) => `%${n} tasarruf`,
     pricingNote: "7 gün ücretsiz deneme. Ödeme şimdilik banka havalesiyle yapılır.",
     finalTitle: "Denemeye hazır mısınız?",
+        soonTitle: "Çok yakında",
+    soonText:
+      "Cihaz teslim alındığı anda müşteriye SMS ve WhatsApp ile otomatik bildirim, cihaz takip bağlantısıyla birlikte.",
     switchLang: "🇸🇦 العربية",
   },
 };
@@ -181,7 +187,17 @@ export default function Landing() {
           ))}
         </div>
       </section>
-
+                <section className="mx-auto max-w-3xl px-4 pb-4">
+        <div className="rounded-2xl border-2 border-dashed border-blue-300 bg-blue-50 p-6 text-center">
+          <span className="inline-block rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white">
+            {t.soonTitle}
+          </span>
+          <p className="mt-3 text-sm font-semibold leading-7 text-slate-700">
+            {t.soonText}
+          </p>
+        </div>
+      </section>
+      
       <section className="bg-white px-4 py-14">
         <div className="mx-auto max-w-4xl">
           <h2 className="mb-8 text-center text-2xl font-extrabold">
