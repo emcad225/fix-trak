@@ -15,18 +15,17 @@ const translations = {
     username: "اسم المستخدم (إنجليزي صغير)",
     password: "كلمة السر (10 أحرف على الأقل)",
     show: "إظهار كلمة السر",
-    submit: "إرسال الطلب",
-    submitting: "جارٍ الإرسال...",
+    submit: "ابدأ التجربة المجانية",
+    submitting: "جارٍ الإنشاء...",
     haveAccount: "لديك حساب؟",
     login: "تسجيل الدخول",
     errUsername: "اسم المستخدم غير صالح",
     errShort: "كلمة السر أقصر من 10 أحرف",
     errInvalid: "تحقق من البيانات المدخلة",
     errTaken: "اسم المستخدم مستخدم مسبقاً",
+    errPhone: "رقم الهاتف مسجّل بمحل آخر",
     errRate: "محاولات كثيرة. حاول لاحقاً",
     errGeneric: "حدث خطأ. حاول مرة ثانية",
-    doneTitle: "تم استلام طلبك ✅",
-    doneText: "سنراجع الطلب ونفعّل حسابك قريباً، وبعدها تقدر تسجّل الدخول.",
     switchLang: "🇹🇷 Türkçe",
   },
   tr: {
@@ -38,19 +37,17 @@ const translations = {
     username: "Kullanıcı adı (küçük İngilizce harf)",
     password: "Şifre (en az 10 karakter)",
     show: "Şifreyi göster",
-    submit: "Talebi gönder",
-    submitting: "Gönderiliyor...",
+    submit: "Ücretsiz denemeyi başlat",
+    submitting: "Oluşturuluyor...",
     haveAccount: "Hesabınız var mı?",
     login: "Giriş yap",
     errUsername: "Geçersiz kullanıcı adı",
     errShort: "Şifre 10 karakterden kısa",
     errInvalid: "Girilen bilgileri kontrol edin",
     errTaken: "Bu kullanıcı adı zaten kullanılıyor",
+    errPhone: "Bu telefon numarası başka bir mağazada kayıtlı",
     errRate: "Çok fazla deneme. Daha sonra tekrar deneyin",
     errGeneric: "Bir hata oluştu. Tekrar deneyin",
-    doneTitle: "Talebiniz alındı ✅",
-    doneText:
-      "Talebinizi inceleyip hesabınızı yakında etkinleştireceğiz. Sonrasında giriş yapabilirsiniz.",
     switchLang: "🇸🇦 العربية",
   },
 };
@@ -72,7 +69,6 @@ export default function RegisterPage() {
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [done, setDone] = useState(false);
 
   function applyLanguage(lang: Lang) {
     setLanguage(lang);
@@ -134,7 +130,13 @@ export default function RegisterPage() {
       });
 
       if (response.ok) {
-        setDone(true);
+        // التسجيل بيدخّلك تلقائياً، فنروح للوحة المحل.
+        window.location.href = "/";
+        return;
+      }
+
+      if (response.status === 422) {
+        setError(t.errPhone);
       } else if (response.status === 409) {
         setError(t.errTaken);
       } else if (response.status === 429) {
@@ -173,120 +175,107 @@ export default function RegisterPage() {
           <p className="mt-2 text-blue-200">{t.subtitle}</p>
         </header>
 
-        {done ? (
-          <div className="rounded-3xl bg-white p-6 text-center shadow-sm">
-            <h2 className="text-xl font-extrabold">{t.doneTitle}</h2>
-            <p className="mt-3 text-sm leading-6 text-slate-600">{t.doneText}</p>
-            <Link
-              href="/login"
-              className="mt-5 inline-block w-full rounded-xl bg-blue-700 px-5 py-3 font-bold text-white"
-            >
+        <form
+          onSubmit={handleSubmit}
+          className="rounded-3xl bg-white p-6 shadow-sm"
+        >
+          <h2 className="mb-5 text-xl font-extrabold">{t.title}</h2>
+
+          <label className={label} htmlFor="shopName">
+            {t.shopName}
+          </label>
+          <input
+            id="shopName"
+            value={shopName}
+            onChange={(e) => setShopName(e.target.value)}
+            required
+            maxLength={80}
+            className={input}
+          />
+
+          <label className={label} htmlFor="ownerName">
+            {t.ownerName}
+          </label>
+          <input
+            id="ownerName"
+            value={ownerName}
+            onChange={(e) => setOwnerName(e.target.value)}
+            required
+            maxLength={80}
+            className={input}
+          />
+
+          <label className={label} htmlFor="phone">
+            {t.phone}
+          </label>
+          <input
+            id="phone"
+            type="tel"
+            dir="ltr"
+            autoComplete="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+            className={input}
+          />
+
+          <label className={label} htmlFor="username">
+            {t.username}
+          </label>
+          <input
+            id="username"
+            dir="ltr"
+            autoComplete="username"
+            autoCapitalize="none"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            className={input}
+          />
+
+          <label className={label} htmlFor="password">
+            {t.password}
+          </label>
+          <input
+            id="password"
+            type={show ? "text" : "password"}
+            dir="ltr"
+            autoComplete="new-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="mb-2 w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
+          />
+          <label className="mb-4 flex items-center gap-2 text-sm text-slate-500">
+            <input
+              type="checkbox"
+              checked={show}
+              onChange={(e) => setShow(e.target.checked)}
+            />
+            {t.show}
+          </label>
+
+          {error && (
+            <p className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full rounded-xl bg-blue-700 px-5 py-3 font-bold text-white disabled:opacity-60"
+          >
+            {submitting ? t.submitting : t.submit}
+          </button>
+
+          <p className="mt-5 text-center text-sm text-slate-500">
+            {t.haveAccount}{" "}
+            <Link href="/login" className="font-bold text-blue-700">
               {t.login}
             </Link>
-          </div>
-        ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="rounded-3xl bg-white p-6 shadow-sm"
-          >
-            <h2 className="mb-5 text-xl font-extrabold">{t.title}</h2>
-
-            <label className={label} htmlFor="shopName">
-              {t.shopName}
-            </label>
-            <input
-              id="shopName"
-              value={shopName}
-              onChange={(e) => setShopName(e.target.value)}
-              required
-              maxLength={80}
-              className={input}
-            />
-
-            <label className={label} htmlFor="ownerName">
-              {t.ownerName}
-            </label>
-            <input
-              id="ownerName"
-              value={ownerName}
-              onChange={(e) => setOwnerName(e.target.value)}
-              required
-              maxLength={80}
-              className={input}
-            />
-
-            <label className={label} htmlFor="phone">
-              {t.phone}
-            </label>
-            <input
-              id="phone"
-              type="tel"
-              dir="ltr"
-              autoComplete="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-              className={input}
-            />
-
-            <label className={label} htmlFor="username">
-              {t.username}
-            </label>
-            <input
-              id="username"
-              dir="ltr"
-              autoComplete="username"
-              autoCapitalize="none"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              className={input}
-            />
-
-            <label className={label} htmlFor="password">
-              {t.password}
-            </label>
-            <input
-              id="password"
-              type={show ? "text" : "password"}
-              dir="ltr"
-              autoComplete="new-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="mb-2 w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
-            />
-            <label className="mb-4 flex items-center gap-2 text-sm text-slate-500">
-              <input
-                type="checkbox"
-                checked={show}
-                onChange={(e) => setShow(e.target.checked)}
-              />
-              {t.show}
-            </label>
-
-            {error && (
-              <p className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
-                {error}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full rounded-xl bg-blue-700 px-5 py-3 font-bold text-white disabled:opacity-60"
-            >
-              {submitting ? t.submitting : t.submit}
-            </button>
-
-            <p className="mt-5 text-center text-sm text-slate-500">
-              {t.haveAccount}{" "}
-              <Link href="/login" className="font-bold text-blue-700">
-                {t.login}
-              </Link>
-            </p>
-          </form>
-        )}
+          </p>
+        </form>
       </div>
     </main>
   );

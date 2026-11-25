@@ -15,7 +15,7 @@ const content = {
     heroText:
       "استقبل أجهزة الزبائن، وتابع حالة كل طلب، وأعطِ زبونك رمز QR يفتح صفحة يشوف فيها حالة جهازه بنفسه. كل شي من مكان واحد، بالعربي والتركي.",
     cta: "ابدأ تجربة مجانية 7 أيام",
-    ctaNote: "بدون بطاقة بنكية. نراجع طلبك ونفعّل حسابك.",
+    ctaNote: "بدون بطاقة بنكية. يتفعّل حسابك فوراً وتبدأ التجربة.",
     featuresTitle: "كل الي يحتاجه محلك",
     features: [
       ["📋", "طلبات الصيانة", "سجّل الجهاز والعطل والسعر، وغيّر الحالة بضغطة."],
@@ -31,7 +31,7 @@ const content = {
       "إشعار تلقائي للزبون عبر SMS وواتساب لحظة استلام جهازه، فيه اسم المحل، ورسالة واتساب فيها رابط تتبع الجهاز.",
     stepsTitle: "كيف تبدأ",
     steps: [
-      "سجّل محلك وانتظر التفعيل.",
+      ".	سجّل محلك وابدأ فوراً.",
       "أضف الطلبات واطبع الوصل مع رمز QR.",
       "تابع الحسابات والتقارير.",
     ],
@@ -52,7 +52,7 @@ const content = {
     heroText:
       "Müşteri cihazlarını kaydedin, her talebin durumunu takip edin ve müşterinize cihazının durumunu kendi görebileceği bir QR kod verin. Hepsi tek yerde, Türkçe ve Arapça.",
     cta: "7 gün ücretsiz deneyin",
-    ctaNote: "Banka kartı gerekmez. Talebinizi inceleyip hesabınızı etkinleştiririz.",
+    ctaNote: "Banka kartı gerekmez. Hesabınız hemen etkinleşir ve deneme başlar.",
     featuresTitle: "Mağazanızın ihtiyacı olan her şey",
     features: [
       ["📋", "Tamir talepleri", "Cihazı, arızayı ve fiyatı kaydedin; durumu tek tıkla güncelleyin."],

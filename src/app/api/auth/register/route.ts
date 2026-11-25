@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { hashPassword } from "@/lib/password";
+import { createSession } from "@/lib/session";
 
 export const runtime = "nodejs";
+
+const TRIAL_DAYS = 7;
 
 // 5 محاولات تسجيل كل ساعة لكل عنوان IP.
 const WINDOW_MS = 60 * 60 * 1000;
@@ -40,7 +43,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     shopName = String(body.shopName ?? "").trim();
     ownerName = String(body.ownerName ?? "").trim();
-    phone = String(body.phone ?? "").trim();
+    // نشيل المسافات والشرطات والأقواس عشان نقارن الأرقام بشكل موحّد.
+    phone = String(body.phone ?? "").trim().replace(/[\s()-]/g, "");
     username = String(body.username ?? "").trim().toLowerCase();
     password = String(body.password ?? "");
   } catch {
@@ -52,7 +56,7 @@ export async function POST(request: Request) {
     shopName.length <= 80 &&
     ownerName.length >= 2 &&
     ownerName.length <= 80 &&
-    /^[0-9+()\s-]{6,20}$/.test(phone) &&
+    /^\+?[0-9]{6,20}$/.test(phone) &&
     /^[a-z0-9._-]{3,32}$/.test(username) &&
     password.length >= 10 &&
     password.length <= 200;
@@ -61,31 +65,45 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "INVALID" }, { status: 400 });
   }
 
-  const exists = await db.user.findUnique({ where: { username } });
-  if (exists) {
+  const usernameTaken = await db.user.findUnique({ where: { username } });
+  if (usernameTaken) {
     return NextResponse.json({ error: "USERNAME_TAKEN" }, { status: 409 });
+  }
+
+  // رقم الهاتف مسجّل بمحل ثاني (يمنع تكرار التجربة المجانية).
+  const phoneTaken = await db.shop.findFirst({
+    where: { phone },
+    select: { id: true },
+  });
+  if (phoneTaken) {
+    return NextResponse.json({ error: "PHONE_TAKEN" }, { status: 422 });
   }
 
   const passwordHash = await hashPassword(password);
 
   try {
-    // المحل والمالك يُنشآن غير مفعّلين حتى توافق عليهما من لوحتك.
-    await db.shop.create({
+    // المحل والمالك بيتفعّلوا فوراً، وتبدأ التجربة المجانية.
+    const shop = await db.shop.create({
       data: {
         name: shopName,
         phone,
-        isActive: false,
+        isActive: true,
+        trialEndsAt: new Date(Date.now() + TRIAL_DAYS * 24 * 60 * 60 * 1000),
         users: {
           create: {
             username,
             name: ownerName,
             passwordHash,
             role: "OWNER",
-            isActive: false,
+            isActive: true,
           },
         },
       },
+      select: { users: { select: { id: true } } },
     });
+
+    // دخول تلقائي بعد التسجيل.
+    await createSession(shop.users[0].id);
   } catch (error) {
     if ((error as { code?: string }).code === "P2002") {
       return NextResponse.json({ error: "USERNAME_TAKEN" }, { status: 409 });
