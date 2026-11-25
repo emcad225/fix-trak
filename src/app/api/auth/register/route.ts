@@ -95,6 +95,7 @@ export async function POST(request: Request) {
             name: ownerName,
             passwordHash,
             role: "OWNER",
+            lastLoginAt: new Date(),
             isActive: true,
           },
         },
