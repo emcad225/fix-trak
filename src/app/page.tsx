@@ -258,7 +258,33 @@ export default function Home() {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [showReceiptPicker, setShowReceiptPicker] = useState(false);
-    const [userName, setUserName] = useState("");
+      const [userName, setUserName] = useState("");
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const response = await fetch("/api/auth/me", { cache: "no-store" });
+        if (!response.ok) return;
+        const data = (await response.json()) as {
+          name?: string;
+          username?: string;
+          role?: string;
+        };
+        setUserName(data.name || data.username || "");
+        setRole(data.role || "");
+      } catch {
+        // تجاهل أخطاء الشبكة
+      }
+    }
+
+    void loadUser();
+  }, []);
+
+  // الحسابات لمالك المحل فقط.
+  const visibleNav = navItems.filter(
+    ([, id]) => id !== "accounts" || role === "OWNER"
+  );
 
   useEffect(() => {
     async function loadUser() {
@@ -547,7 +573,7 @@ export default function Home() {
         <p className="px-6 pb-3 pt-8 text-xs text-slate-400">{t.mainMenu}</p>
 
         <nav className="space-y-2 px-3">
-          {navItems.map(([icon, id]) => (
+          {visibleNav.map(([icon, id]) => (
             <button
               key={id}
               onClick={() => setActiveNav(id)}

@@ -22,6 +22,11 @@ function net(payments: { amount: unknown; type: string }[]) {
 export async function GET() {
   const access = await requireActiveShop();
   if (!access.ok) return access.response;
+  
+  // الحسابات لمالك المحل فقط.
+  if (!access.isOwner) {
+    return NextResponse.json({ error: "FORBIDDEN" }, { status: 403 });
+  }
 
   const repairs = await db.repairOrder.findMany({
     where: { shopId: access.shopId },
@@ -84,6 +89,11 @@ export async function GET() {
 export async function POST(request: Request) {
   const access = await requireActiveShop();
   if (!access.ok) return access.response;
+  
+  // الحسابات لمالك المحل فقط.
+  if (!access.isOwner) {
+    return NextResponse.json({ error: "FORBIDDEN" }, { status: 403 });
+  }
 
   let body: { id?: unknown; amount?: unknown; method?: unknown; type?: unknown };
 
