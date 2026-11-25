@@ -282,8 +282,9 @@ export default function Home() {
   }, []);
 
   // الحسابات لمالك المحل فقط.
-  const visibleNav = navItems.filter(
-    ([, id]) => id !== "accounts" || role === "OWNER"
+   const visibleNav = navItems.filter(
+    ([, id]) =>
+      (id !== "accounts" && id !== "reports") || role === "OWNER"
   );
 
   useEffect(() => {

@@ -11,6 +11,11 @@ function monthKey(date: Date) {
 export async function GET() {
   const access = await requireActiveShop();
   if (!access.ok) return access.response;
+  
+  // التقارير المالية لمالك المحل فقط.
+  if (!access.isOwner) {
+    return NextResponse.json({ error: "FORBIDDEN" }, { status: 403 });
+  }
 
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth() - 5, 1);

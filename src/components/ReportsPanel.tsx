@@ -112,8 +112,12 @@ export default function ReportsPanel({ language }: { language: Lang }) {
           window.location.href = "/login";
           return;
         }
-        if (response.status === 402) {
+                   if (response.status === 402) {
           window.location.href = "/billing";
+          return;
+        }
+                if (response.status === 403) {
+          setError(true);
           return;
         }
         if (!response.ok) throw new Error("LOAD");
