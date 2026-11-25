@@ -3,8 +3,9 @@ import { jwtVerify } from "jose";
 
 const SESSION_COOKIE = "fixtrack_session";
 
-// صفحات و API عامة: الدخول، وتتبع الزبون عبر QR.
+// صفحات و API عامة: الصفحة التعريفية، الدخول، التسجيل، وتتبع الزبون عبر QR.
 const PUBLIC_PREFIXES = [
+  "/home",
   "/login",
   "/register",
   "/track",
@@ -12,6 +13,7 @@ const PUBLIC_PREFIXES = [
   "/api/auth/register",
   "/api/track",
 ];
+
 function isPublic(pathname: string) {
   return PUBLIC_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(prefix + "/")
@@ -34,6 +36,11 @@ async function hasValidSession(request: NextRequest) {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const loggedIn = await hasValidSession(request);
+
+  // الزائر غير المسجّل بيشوف الصفحة التعريفية عند فتح الرئيسية.
+  if (pathname === "/" && !loggedIn) {
+    return NextResponse.rewrite(new URL("/home", request.url));
+  }
 
   if (pathname === "/login" && loggedIn) {
     return NextResponse.redirect(new URL("/", request.url));
