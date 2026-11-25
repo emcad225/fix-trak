@@ -26,6 +26,10 @@ const content = {
       ["👥", "موظفون بصلاحيات", "أضف موظفين بدون حد أقصى. الحذف والاسترجاع لمالك المحل فقط."],
       ["🔒", "بيانات منفصلة", "كل محل بيشوف بياناته فقط، ولا أحد يشوف بيانات محل ثاني."],
     ],
+    soonTitle: "قريباً",
+    soonShort: "إشعارات SMS وواتساب للزبائن",
+    soonText:
+      "إشعار تلقائي للزبون عبر SMS وواتساب لحظة استلام جهازه، فيه اسم المحل، ورسالة واتساب فيها رابط تتبع الجهاز.",
     stepsTitle: "كيف تبدأ",
     steps: [
       "سجّل محلك وانتظر التفعيل.",
@@ -40,9 +44,6 @@ const content = {
     save: (n: number) => `وفّر ${n}%`,
     pricingNote: "تجربة مجانية 7 أيام. الدفع حالياً بتحويل بنكي.",
     finalTitle: "جاهز تجرّب؟",
-        soonTitle: "قريباً",
-    soonText:
-      "إشعارات تلقائية للزبون عبر SMS وواتساب لحظة استلام جهازه، مع رابط تتبع الجهاز.",
     switchLang: "🇹🇷 Türkçe",
   },
   tr: {
@@ -62,6 +63,10 @@ const content = {
       ["👥", "Yetkili çalışanlar", "Sınırsız çalışan ekleyin. Silme ve iade yalnızca mağaza sahibine aittir."],
       ["🔒", "Ayrı veriler", "Her mağaza yalnızca kendi verilerini görür."],
     ],
+    soonTitle: "Çok yakında",
+    soonShort: "Müşterilere SMS ve WhatsApp bildirimleri",
+    soonText:
+      "Cihaz teslim alındığı anda müşteriye SMS ve WhatsApp ile otomatik bildirim: mağaza adı ve WhatsApp'ta cihaz takip bağlantısı.",
     stepsTitle: "Nasıl başlanır",
     steps: [
       "Mağazanızı kaydedin ve onayı bekleyin.",
@@ -76,9 +81,6 @@ const content = {
     save: (n: number) => `%${n} tasarruf`,
     pricingNote: "7 gün ücretsiz deneme. Ödeme şimdilik banka havalesiyle yapılır.",
     finalTitle: "Denemeye hazır mısınız?",
-        soonTitle: "Çok yakında",
-    soonText:
-      "Cihaz teslim alındığı anda müşteriye SMS ve WhatsApp ile otomatik bildirim, cihaz takip bağlantısıyla birlikte.",
     switchLang: "🇸🇦 العربية",
   },
 };
@@ -167,6 +169,9 @@ export default function Landing() {
             {t.cta}
           </Link>
           <p className="mt-3 text-sm text-blue-200">{t.ctaNote}</p>
+          <p className="mt-5 inline-block rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-blue-100">
+            💬 {t.soonTitle}: {t.soonShort}
+          </p>
         </div>
       </section>
 
@@ -187,17 +192,20 @@ export default function Landing() {
           ))}
         </div>
       </section>
-                <section className="mx-auto max-w-3xl px-4 pb-4">
-        <div className="rounded-2xl border-2 border-dashed border-blue-300 bg-blue-50 p-6 text-center">
-          <span className="inline-block rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white">
-            {t.soonTitle}
-          </span>
-          <p className="mt-3 text-sm font-semibold leading-7 text-slate-700">
-            {t.soonText}
-          </p>
+
+      <section className="mx-auto max-w-5xl px-4 pb-14">
+        <div className="flex flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-blue-300 bg-blue-50 p-6 text-center sm:flex-row sm:text-start">
+          <div className="text-4xl">💬</div>
+          <div className="flex-1">
+            <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white">
+              {t.soonTitle}
+            </span>
+            <h3 className="mt-2 text-lg font-extrabold">{t.soonShort}</h3>
+            <p className="mt-1 text-sm leading-7 text-slate-600">{t.soonText}</p>
+          </div>
         </div>
       </section>
-      
+
       <section className="bg-white px-4 py-14">
         <div className="mx-auto max-w-4xl">
           <h2 className="mb-8 text-center text-2xl font-extrabold">
