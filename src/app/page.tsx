@@ -258,6 +258,22 @@ export default function Home() {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [showReceiptPicker, setShowReceiptPicker] = useState(false);
+    const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const response = await fetch("/api/auth/me", { cache: "no-store" });
+        if (!response.ok) return;
+        const data = (await response.json()) as { name?: string; username?: string };
+        setUserName(data.name || data.username || "");
+      } catch {
+        // تجاهل أخطاء الشبكة
+      }
+    }
+
+    void loadUser();
+  }, []);
 
   function applyLanguage(lang: Lang) {
     setLanguage(lang);
@@ -571,8 +587,8 @@ export default function Home() {
               {t.switchLang}
             </button>
 
-            <span className="hidden text-sm text-slate-500 sm:block">
-              {t.welcome}
+                        <span className="hidden text-sm text-slate-500 sm:block">
+              {userName ? `${t.welcome} ${userName}` : t.welcome}
             </span>
 
                        <button
