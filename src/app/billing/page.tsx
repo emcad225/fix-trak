@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import ReceiptUpload from "@/components/ReceiptUpload";
 
 type Lang = "ar" | "tr";
 type Plan = "MONTHLY" | "YEARLY";
@@ -57,7 +58,7 @@ const translations = {
     payStep2: "اكتب هذا النص في وصف التحويل:",
     copy: "نسخ",
     copied: "تم النسخ ✓",
-    payStep3: "بعد التحويل، ارفع صورة الوصل ليتم تفعيل اشتراكك (قريباً).",
+    payStep3: "بعد التحويل، ارفع صورة الوصل بالأسفل ليتم تفعيل اشتراكك.",
     ownerOnly: "الدفع من صلاحية مالك المحل. تواصل معه ليجدّد الاشتراك.",
     requestsTitle: "طلبات الدفع السابقة",
     reqStatus: {
@@ -96,7 +97,7 @@ const translations = {
     payStep2: "Havale açıklamasına şunu yazın:",
     copy: "Kopyala",
     copied: "Kopyalandı ✓",
-    payStep3: "Havaleden sonra dekontu yükleyin, aboneliğiniz etkinleştirilsin (yakında).",
+    payStep3: "Havaleden sonra dekontu aşağıdan yükleyin, aboneliğiniz etkinleştirilsin.",
     ownerOnly: "Ödeme mağaza sahibinin yetkisindedir. Aboneliği yenilemesi için onunla iletişime geçin.",
     requestsTitle: "Önceki ödeme talepleri",
     reqStatus: {
@@ -386,7 +387,9 @@ export default function BillingPage() {
 
             <p className="mt-5 text-sm text-slate-600">3. {t.payStep3}</p>
           </div>
-
+                    {shop.status !== "DISABLED" && shop.status !== "PENDING" && (
+            <ReceiptUpload plan={plan} language={language} />
+          )}
           {data.requests.length > 0 && (
             <div className="mt-5 rounded-2xl bg-white p-6 shadow-sm">
               <h3 className="mb-3 text-lg font-extrabold">{t.requestsTitle}</h3>
