@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { canUseApp, shopStatus } from "@/lib/subscription";
 
+
 export const runtime = "nodejs";
 
 const statusLabels: Record<RepairStatus, string> = {
@@ -54,7 +55,7 @@ async function requireShop(): Promise<Access> {
     select: { isActive: true, trialEndsAt: true, subscribedUntil: true },
   });
 
-  // التجربة أو الاشتراك منتهي: نوقف الاستخدام (402).
+   // التجربة أو الاشتراك منتهي: نوقف الاستخدام (402).
   if (!shop || !canUseApp(shopStatus(shop))) {
     return {
       ok: false,
@@ -64,9 +65,9 @@ async function requireShop(): Promise<Access> {
       ),
     };
   }
+
   return { ok: true, shopId: user.shopId, isOwner: user.role === "OWNER" };
 }
-
 function serializeRepair(repair: {
   repairNumber: number;
   trackingToken: string;
