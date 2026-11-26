@@ -42,7 +42,7 @@ export async function GET() {
   const latest = await db.subscriptionPayment.findFirst({
     where: { shopId: user.shopId },
     orderBy: { createdAt: "desc" },
-    select: { status: true, plan: true, createdAt: true },
+    select: { status: true, plan: true, createdAt: true, note: true },
   });
 
   return NextResponse.json({ latest });

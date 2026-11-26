@@ -9,6 +9,7 @@ type Latest = {
   status: "PENDING" | "APPROVED" | "REJECTED";
   plan: Plan;
   createdAt: string;
+  note: string | null;
 } | null;
 
 const MAX_BYTES = 4 * 1024 * 1024;
@@ -18,12 +19,14 @@ const labels = {
     title: "ارفع صورة الوصل",
     hint: "صورة (JPG أو PNG) أو PDF، حتى 4MB.",
     choose: "اختر الملف",
+    noneChosen: "لم يتم اختيار ملف",
     submit: "إرسال الوصل",
     submitting: "جارٍ الإرسال...",
     ok: "تم إرسال الوصل. سنراجعه ونفعّل اشتراكك بأقرب وقت.",
     pending: "وصلك قيد المراجعة. سنفعّل اشتراكك بعد التأكد من التحويل.",
     approved: "آخر وصل تم قبوله.",
     rejected: "آخر وصل تم رفضه. تأكد من التحويل وأرسل وصلاً جديداً.",
+    reason: "سبب الرفض:",
     noFile: "اختر ملفاً أولاً",
     tooLarge: "الملف أكبر من 4MB",
     badType: "نوع الملف غير مدعوم (JPG أو PNG أو PDF)",
@@ -34,12 +37,14 @@ const labels = {
     title: "Dekontu yükleyin",
     hint: "Görsel (JPG veya PNG) ya da PDF, en fazla 4MB.",
     choose: "Dosya seç",
+    noneChosen: "Dosya seçilmedi",
     submit: "Dekontu gönder",
     submitting: "Gönderiliyor...",
     ok: "Dekont gönderildi. İnceleyip aboneliğinizi en kısa sürede etkinleştireceğiz.",
     pending: "Dekontunuz inceleniyor. Havale doğrulandıktan sonra aboneliğiniz etkinleşecek.",
     approved: "Son dekont onaylandı.",
     rejected: "Son dekont reddedildi. Havaleyi kontrol edip yeni dekont gönderin.",
+    reason: "Ret nedeni:",
     noFile: "Önce bir dosya seçin",
     tooLarge: "Dosya 4MB'tan büyük",
     badType: "Desteklenmeyen dosya türü (JPG, PNG veya PDF)",
@@ -57,6 +62,7 @@ export default function ReceiptUpload({
 }) {
   const [lang, setLang] = useState<Lang>(language ?? "ar");
   const [file, setFile] = useState<File | null>(null);
+  const [fileKey, setFileKey] = useState(0);
   const [latest, setLatest] = useState<Latest>(null);
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -118,6 +124,7 @@ export default function ReceiptUpload({
 
       if (response.ok) {
         setFile(null);
+        setFileKey((k) => k + 1);
         setMessage(t.ok);
         await loadLatest();
         return;
@@ -154,18 +161,31 @@ export default function ReceiptUpload({
       <p className="mb-4 text-sm text-slate-500">{t.hint}</p>
 
       {statusText && (
-        <p className="mb-4 rounded-xl bg-blue-50 px-4 py-3 text-sm font-bold text-blue-800">
-          {statusText}
-        </p>
+        <div className="mb-4 rounded-xl bg-blue-50 px-4 py-3 text-sm font-bold text-blue-800">
+          <p>{statusText}</p>
+          {latest?.status === "REJECTED" && latest.note && (
+            <p className="mt-2 text-red-700">
+              {t.reason} {latest.note}
+            </p>
+          )}
+        </div>
       )}
 
-      <input
-        type="file"
-        accept="image/jpeg,image/png,application/pdf"
-        onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-        className="mb-4 block w-full text-sm file:mr-3 file:rounded-xl file:border-0 file:bg-slate-100 file:px-4 file:py-2 file:font-bold"
-        aria-label={t.choose}
-      />
+      <div className="mb-4 flex items-center gap-3">
+        <label className="cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-sm font-bold hover:bg-slate-200">
+          {t.choose}
+          <input
+            key={fileKey}
+            type="file"
+            accept="image/jpeg,image/png,application/pdf"
+            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            className="sr-only"
+          />
+        </label>
+        <span className="min-w-0 truncate text-sm text-slate-500">
+          {file ? file.name : t.noneChosen}
+        </span>
+      </div>
 
       {message && (
         <p
