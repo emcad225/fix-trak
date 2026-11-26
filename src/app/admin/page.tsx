@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import AdminPayments from "@/components/AdminPayments";
 
 type Lang = "ar" | "tr";
 type Status = "PENDING" | "TRIAL" | "SUBSCRIBED" | "EXPIRED" | "DISABLED";
@@ -27,6 +28,8 @@ const translations = {
   ar: {
     title: "لوحة مدير المنصة",
     subtitle: "المحلات المسجّلة وحالة اشتراكاتها",
+    tabShops: "المحلات",
+    tabPayments: "الوصولات",
     logout: "خروج",
     refresh: "تحديث",
     search: "ابحث باسم المحل أو المالك أو الهاتف...",
@@ -50,7 +53,7 @@ const translations = {
     never: "لم يدخل بعد",
     daysLeft: (n: number) => (n > 0 ? `متبقي ${n} يوم` : "انتهى"),
     plans: { MONTHLY: "شهري", YEARLY: "سنوي" },
-    approve: "تفعيل (تجربة 14 يوم)",
+    approve: "تفعيل (تجربة 7 يوم)",
     monthly: "اشتراك شهري",
     yearly: "اشتراك سنوي",
     extend: "تمديد 7 أيام",
@@ -72,6 +75,8 @@ const translations = {
   tr: {
     title: "Platform Yönetim Paneli",
     subtitle: "Kayıtlı mağazalar ve abonelik durumları",
+    tabShops: "Mağazalar",
+    tabPayments: "Dekontlar",
     logout: "Çıkış",
     refresh: "Yenile",
     search: "Mağaza, sahip veya telefon ara...",
@@ -165,6 +170,8 @@ export default function AdminPage() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [filter, setFilter] = useState<Filter>("ALL");
   const [search, setSearch] = useState("");
+    const [tab, setTab] = useState<"SHOPS" | "PAYMENTS">("SHOPS");
+  const [pendingPayments, setPendingPayments] = useState(0);
 
   function applyLanguage(lang: Lang) {
     setLanguage(lang);
@@ -353,7 +360,37 @@ export default function AdminPage() {
       </header>
 
       <div className="mx-auto max-w-7xl p-4 sm:p-8">
-        <p className="mb-5 text-sm text-slate-500">{t.subtitle}</p>
+        <p className="mb-4 text-sm text-slate-500">{t.subtitle}</p>
+
+        <div className="mb-5 flex gap-2">
+          <button
+            type="button"
+            onClick={() => setTab("SHOPS")}
+            className={`rounded-xl px-5 py-2 text-sm font-bold ${
+              tab === "SHOPS"
+                ? "bg-blue-700 text-white"
+                : "bg-white text-slate-600 hover:bg-slate-100"
+            }`}
+          >
+            {t.tabShops}
+          </button>
+          <button
+            type="button"
+            onClick={() => setTab("PAYMENTS")}
+            className={`rounded-xl px-5 py-2 text-sm font-bold ${
+              tab === "PAYMENTS"
+                ? "bg-blue-700 text-white"
+                : "bg-white text-slate-600 hover:bg-slate-100"
+            }`}
+          >
+            {t.tabPayments}
+            {pendingPayments > 0 && (
+              <span className="ms-2 rounded-full bg-red-600 px-2 py-0.5 text-xs text-white">
+                {pendingPayments}
+              </span>
+            )}
+          </button>
+        </div>
 
         {notice && (
           <div
@@ -379,6 +416,7 @@ export default function AdminPage() {
           </div>
         )}
 
+        <div className={tab === "SHOPS" ? "" : "hidden"}>
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
           {(["ALL", "SUBSCRIBED", "TRIAL", "PENDING", "EXPIRED"] as Filter[]).map(
             (key) => (
@@ -599,6 +637,14 @@ export default function AdminPage() {
               </tbody>
             </table>
           </div>
+        </div>
+        </div>
+
+        <div className={tab === "PAYMENTS" ? "" : "hidden"}>
+          <AdminPayments
+            onPendingCount={setPendingPayments}
+            onApproved={() => void load()}
+          />
         </div>
       </div>
     </main>
